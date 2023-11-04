@@ -10,8 +10,19 @@ const db = require("./../db");
  */
 router.get("/students", async function (req, res)
 {
-    // TODO: implement this route
-});
+    try
+    {
+        const listOfStudents = await db.getAllStudents();
+        console.log("listOfStudents:", listOfStudents);
+
+        // this automatically converts the array of students to JSON and returns it to the client
+        res.send(listOfStudents);
+    }
+    catch (err)
+    {
+        console.error("Error:", err.message);
+        res.status(500).json({ "error": "Internal Server Error" });
+    }});
 
 
 /**
@@ -23,8 +34,31 @@ router.get("/students", async function (req, res)
  */
 router.get("/students/:id", async function (req, res)
 {
-    // TODO: implement this route
-});
+    try
+    {
+        const id = req.params.id;
+        console.log("id = " + id);
+
+        const studentWithID = await db.getStudentWithId(id);
+        console.log("studentWithID:", studentWithID);
+
+        if (studentWithID == null)
+        {
+            console.log("No student with id " + id + " exists.");
+
+            // return 404 status code (i.e., error that the student was not found)
+            res.status(404).json({"error": "student with id " + id + " not found"});
+            return;
+        }
+
+        // this automatically converts the student to JSON and returns it to the client
+        res.send(studentWithID);
+    }
+    catch (err)
+    {
+        console.error("Error:", err.message);
+        res.status(500).json({"error": "Internal Server Error"});
+    }});
 
 
 /**

@@ -2,7 +2,6 @@ const util = require("util");
 const fs = require("fs");
 const sqlite3 = require('sqlite3').verbose();
 
-// TODO: create a SQLite data source in IntelliJ with this file name
 const SQLITE_FILE_NAME = "cs208_hw7.sqlite";
 
 
@@ -349,7 +348,7 @@ function getStudentWithId(id)
         db.serialize(function()
         {
             const sql =
-                `TODO: replace me with actual query`;
+                `SELECT * FROM students where id = ? `;
 
             function callbackAfterReturnedRowIsProcessed(err, row)
             {
