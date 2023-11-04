@@ -436,7 +436,9 @@ function updateExistingStudentInformation(studentToUpdate)
         db.serialize(function()
         {
             const sql =
-                `TODO: replace me with actual query`;
+                `UPDATE students 
+                 SET id = ?, first_name = ?, last_name = ?, birth_date = ? 
+                 WHERE id = ?;`;
 
             function callbackAfterReturnedRowIsProcessed(err, row)
             {
@@ -460,7 +462,7 @@ function updateExistingStudentInformation(studentToUpdate)
 
             // execute the sql prepared statement
             // and return the number of rows affected
-            db.run(sql, [studentToUpdate.firstName, studentToUpdate.lastName, studentToUpdate.birthDate, studentToUpdate.id], callbackAfterReturnedRowIsProcessed);
+            db.run(sql, [studentToUpdate.id, studentToUpdate.firstName, studentToUpdate.lastName, studentToUpdate.birthDate, studentToUpdate.id], callbackAfterReturnedRowIsProcessed);
         });
     });
 }

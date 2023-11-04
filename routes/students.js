@@ -138,8 +138,61 @@ router.post("/students", async function (req, res)
  */
 router.put("/students/:id", async function (req, res)
 {
-    // TODO: implement this route or the PATCH route below
-});
+    try
+    {
+        const id = req.params.id;
+        const firstName = req.body.firstName;
+        const lastName = req.body.lastName;
+        const birthDate = req.body.birthDate;
+
+        console.log("id          = " + id);
+        console.log("first_name  = " + firstName);
+        console.log("last_name   = " + lastName);
+        console.log("birth_date  = " + birthDate);
+
+        if (firstName === undefined)
+        {
+            res.status(400).json({"error": "bad request: expected parameter 'firstName' is not defined"});
+            return;
+        }
+
+        if (lastName === undefined)
+        {
+            res.status(400).json({"error": "bad request: expected parameter 'lastName' is not defined"});
+            return;
+        }
+
+        if (birthDate === undefined)
+        {
+            res.status(400).json({"error": "bad request: expected parameter 'birthDate' is not defined"});
+            return;
+        }
+
+        let studentToUpdate = await db.getStudentWithId(id);
+        console.log({studentToUpdate}); // this will pretty print the student object
+
+        if (studentToUpdate == null)
+        {
+            console.log("No student with id " + id + " exists.");
+
+            // return 404 status code (i.e., error that the student was not found)
+            res.status(404).json({"error": "failed to update the student with id = " + id + " in the database because it does not exist"});
+            return;
+        }
+
+        // override the values of all the fields from studentToUpdate with the values from the parameters
+        studentToUpdate.firstName = firstName;
+        studentToUpdate.lastName = lastName;
+        studentToUpdate.birthDate = birthDate;
+
+        await db.updateExistingStudentInformation(studentToUpdate);
+        res.json(studentToUpdate);
+    }
+    catch (err)
+    {
+        console.error("Error:", err.message);
+        res.status(422).json({"error": "failed to update the student with id = " + req.params.id + " in the database"});
+    }});
 
 
 /**
@@ -158,8 +211,61 @@ router.put("/students/:id", async function (req, res)
  */
 router.patch("/students/:id", async function (req, res)
 {
-    // TODO: implement this route or the PUT route above
-});
+    try
+    {
+    const id = req.params.id;
+    const firstName = req.body.firstName;
+    const lastName = req.body.lastName;
+    const birthDate = req.body.birthDate;
+
+    console.log("id          = " + id);
+    console.log("first_name  = " + firstName);
+    console.log("last_name   = " + lastName);
+    console.log("birth_date  = " + birthDate);
+
+    if (firstName === undefined)
+    {
+        res.status(400).json({"error": "bad request: expected parameter 'firstName' is not defined"});
+        return;
+    }
+
+    if (lastName === undefined)
+    {
+        res.status(400).json({"error": "bad request: expected parameter 'lastName' is not defined"});
+        return;
+    }
+
+    if (birthDate === undefined)
+    {
+        res.status(400).json({"error": "bad request: expected parameter 'birthDate' is not defined"});
+        return;
+    }
+
+    let studentToUpdate = await db.getStudentWithId(id);
+    console.log({studentToUpdate}); // this will pretty print the student object
+
+    if (studentToUpdate == null)
+    {
+        console.log("No student with id " + id + " exists.");
+
+        // return 404 status code (i.e., error that the student was not found)
+        res.status(404).json({"error": "failed to update the student with id = " + id + " in the database because it does not exist"});
+        return;
+    }
+
+    // override the values of all the fields from studentToUpdate with the values from the parameters
+    studentToUpdate.firstName = firstName;
+    studentToUpdate.lastName = lastName;
+    studentToUpdate.birthDate = birthDate;
+
+    await db.updateExistingStudentInformation(studentToUpdate);
+    res.json(studentToUpdate);
+}
+catch (err)
+{
+    console.error("Error:", err.message);
+    res.status(422).json({"error": "failed to update the student with id = " + req.params.id + " in the database"});
+}});
 
 
 /**
