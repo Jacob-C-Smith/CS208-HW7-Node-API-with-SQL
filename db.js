@@ -398,7 +398,8 @@ function addNewStudent(createdStudent)
         db.serialize(function()
         {
             const sql =
-                `TODO: replace me with actual query`;
+                `INSERT INTO students (id,first_name,last_name,birth_date) 
+                VALUES(?, ?, ?, ?)`;
 
             function callbackAfterReturnedRowIsProcessed(err, row)
             {
@@ -422,7 +423,7 @@ function addNewStudent(createdStudent)
 
             // execute the sql prepared statement
             // and return the id of the newly created student
-            db.run(sql, [createdStudent.firstName, createdStudent.lastName, createdStudent.birthDate], callbackAfterReturnedRowIsProcessed);
+            db.run(sql, [createdStudent.id, createdStudent.first_name, createdStudent.last_name, createdStudent.birth_date], callbackAfterReturnedRowIsProcessed);
         });
     });
 }
